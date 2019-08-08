@@ -1,11 +1,13 @@
 import { EventEmitter } from './event_emitter.js';
+import { AutosaveService } from './autosave.js';
 
 export class ListModel extends EventEmitter {
     constructor(data) {
         super();
-
         this.id = data[0];
+        this.url = `https://todoapp-dff63.firebaseio.com/${this.id}/.json`;
         this.data = data[1];
+        this.autosave = new AutosaveService(this.data, this.url);
     }
 
     init() {
@@ -45,8 +47,8 @@ export class ListModel extends EventEmitter {
     }
 
     sortList() {
-        this.data.items.sort((firstItem,secondItem)=>{
-            if(!firstItem[1].checked && secondItem[1].checked) return -1;
+        this.data.items.sort((firstItem, secondItem) => {
+            if (!firstItem[1].checked && secondItem[1].checked) return -1;
         });
         this.emit('list changed', this.data)
     }

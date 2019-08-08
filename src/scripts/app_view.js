@@ -20,7 +20,7 @@ export class AppView extends EventEmitter {
         return `
             <div class="col-12 col-md-9 col-lg-6 d-flex flex-column p-3 mx-auto">
                 <div class="d-flex flex-column bg-light text-secondary border-top border-bottom p-3">
-                    <h4 class="m-0 mx-auto">The ToDoList</h4>
+                    <h4 class="m-0 mx-auto">TheToDoApp</h4>
                     <div class="d-flex mt-3">
                         <div class="flex-grow-1">
                             <input id="name" class="form-control" type="text" placeholder="Add new list">

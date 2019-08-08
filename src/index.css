@@ -18,6 +18,15 @@
     font-size: 125%;
 }
 
+.marker {
+    height: 10px;
+    width: 10px;
+    position: absolute;
+    top: 0;
+    left: 18px;
+    transform: translateY(-50%) rotate(45deg);
+}
+
 /* bootstrat overwrite */
 
 .btn {

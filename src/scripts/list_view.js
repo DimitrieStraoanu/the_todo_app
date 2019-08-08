@@ -59,13 +59,12 @@ export class ListView extends EventEmitter {
         return `
             <div id="listBtn" class="d-flex align-items-center pointer ${data.opened ? '' : 'border-bottom'} p-3">
                 <div class="d-flex align-items-center text-secondary m-0">
-                    <i class="fas fa-${data.opened ? 'minus' : 'plus'}"></i>
-                    <h5 class="m-0 ml-2">${data.name}</h5>
+                    <h5 class="m-0">${data.name}</h5>
                 </div>
                 ${this.generateStatisticsHtml(data)}
             </div>
             <div id="listOptions" class="${data.opened ? '' : 'd-none'} bg-light">
-                <div class="bg-primary p-1"></div>
+                <div class="bg-primary p-1 position-relative"><span class="bg-primary marker"></span></div>
                 <div class="d-flex justify-content-around border-bottom p-2">
                     <button id="renameBtn" class="btn btn-link p-0">Rename list</button>
                     <button id="deleteBtn" class="btn btn-link p-0">Delete list</button>
@@ -157,8 +156,8 @@ export class ListView extends EventEmitter {
                     <p class="mb-2">Delete list "${this.listModel.data.name}" ?</p>
                     <hr class="m-0">
                     <div class="mt-2">
-                        <button id="cancelBtn" class="btn btn-link">Cancel</button>
-                        <button id="confirmBtn" class="btn btn-link">Confirm</button>
+                        <button id="cancelBtn" class="btn btn-link p-0">Cancel</button>
+                        <button id="confirmBtn" class="btn btn-link p-0">Confirm</button>
                     </div>
                 </div>
             </div>
