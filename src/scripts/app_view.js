@@ -4,12 +4,9 @@ export class AppView extends EventEmitter {
     constructor(appModel, appElementID) {
         super();
         this.element = document.querySelector(appElementID);
-        //attach to model
+
         appModel.on('ready', (data) => this.updateAppElement(data));
-        appModel.on('list added', (id) => {
-            this.createListElement(id);
-            this.clearInput();
-        });
+        appModel.on('data changed', (data) => this.updateAppElement(data));
     }
     updateAppElement(data) {
         this.element.innerHTML = this.generateAppHtml(data);
@@ -29,16 +26,16 @@ export class AppView extends EventEmitter {
                     </div>
                 </div>
                 <div id="lists">
-                ${data.map(list => `<div id="${list[0]}"></div>`).join('')}
+                ${data.map(list => `<div id="${list.id}"></div>`).join('')}
                 </div>
             </div>
         `;
     }
-    createListElement(data) {
+    createListElement(list) {
         let div = document.createElement('div');
-        div.id = data[0];
+        div.id = list.id;
         this.element.querySelector('#lists').appendChild(div);
-        this.emit('listElement created', data);
+        this.emit('listElement created', list);
     }
     toggleInputFields() {
         this.element.querySelector('#input').classList.toggle('d-none');
@@ -47,10 +44,8 @@ export class AppView extends EventEmitter {
         this.element.querySelector('#name').value = '';
     }
     makeNewList() {
-        let list = {
-            name: this.element.querySelector('#name').value,
-            items: []
-        };
+        let list = {};
+        list.name = this.element.querySelector('#name').value;
         this.emit('new list', list);
     }
 }

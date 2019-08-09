@@ -9,8 +9,8 @@ export class ListView extends EventEmitter {
         this.element = document.querySelector(listElementID);
         this.listener = new Listener();
 
-        listModel.on('list changed', (data) => this.updateListElement(data));
-        listModel.on('list deleted', () => this.removeListElement());
+        listModel.on('ready', (data) => this.updateListElement(data));
+        listModel.on('data changed', (data) => this.updateListElement(data));
     }
 
     updateListElement(data) {
@@ -96,9 +96,9 @@ export class ListView extends EventEmitter {
     generateItemHtml(item) {
         return `
             <div class="d-flex align-items-center border-top py-3">
-                <div class="itemBtn d-flex align-items-center pointer" data-id="${item[0]}" data-checked = "${item[1].checked}">
-                    <i class="far fa-${item[1].checked ? 'check-' : ''}square fa-125x ml-3"></i>
-                    <span class="ml-2 ${item[1].checked ? 'checked' : ''}"> ${item[1].name}</span>
+                <div class="itemBtn d-flex align-items-center pointer" data-id="${item.id}" data-checked = "${item.checked}">
+                    <i class="far fa-${item.checked ? 'check-' : ''}square fa-125x ml-3"></i>
+                    <span class="ml-2 ${item.checked ? 'checked' : ''}"> ${item.name}</span>
                 </div>
                 <button class="btn btn-link ml-auto p-0">Rename</button>
                 <button class="btn btn-link ml-3 p-0 mr-3">Delete</button>
@@ -107,10 +107,8 @@ export class ListView extends EventEmitter {
     }
 
     makeNewItem() {
-        let newItem = {
-            name: this.element.querySelector('#itemName').value,
-            checked: false
-        };
+        let newItem = {};
+        newItem.name = this.element.querySelector('#itemName').value;
         this.emit('newItem', newItem);
     }
 
@@ -127,16 +125,16 @@ export class ListView extends EventEmitter {
         let id = e.currentTarget.dataset.id;
         let isChecked = e.currentTarget.dataset.checked;
         if (isChecked === 'true') {
-            this.emit('itemElement changed', [id, { checked: false }]);
+            this.emit('itemElement changed', { id:id, checked: false });
         } else {
-            this.emit('itemElement changed', [id, { checked: true }]);
+            this.emit('itemElement changed', { id:id, checked: true });
         }
     }
 
     getCheckedItems(data) {
         let checkedItems = 0;
         data.items.forEach(item => {
-            if (item[1].checked) checkedItems++;
+            if (item.checked) checkedItems++;
         });
         return checkedItems;
     }
@@ -157,11 +155,11 @@ export class ListView extends EventEmitter {
                     <hr class="m-0">
                     <div class="mt-2">
                         <button id="cancelBtn" class="btn btn-link p-0">Cancel</button>
-                        <button id="confirmBtn" class="btn btn-link p-0">Confirm</button>
+                        <button id="confirmBtn" class="btn btn-link p-0 ml-2">Confirm</button>
                     </div>
                 </div>
             </div>
-        `;        
+        `;
         div.innerHTML = html;
 
         this.listener.addListener({
@@ -173,7 +171,7 @@ export class ListView extends EventEmitter {
         this.listener.addListener({
             element: div.querySelector('#confirmBtn'),
             event: 'click',
-            callback: () => this.emit('listElement deleted')
+            callback: () => this.removeListElement()
         });
 
         this.element.appendChild(div);
@@ -182,6 +180,7 @@ export class ListView extends EventEmitter {
     removeListElement() {
         this.element.parentElement.removeChild(this.element);
         this.listener.removeAllListeners();
+        this.emit('listElement removed')
     }
 
     confirmRename() {

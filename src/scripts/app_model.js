@@ -1,34 +1,46 @@
 import { EventEmitter } from './event_emitter.js';
-import {Generator} from './generator.js';
-let generator = new Generator();
+import { IDGenerator } from './id_generator.js';
+import { Autosave } from './autosave.js';
 
 export class AppModel extends EventEmitter {
     constructor() {
         super();
         this.data = [];
-    }
-    getLists() {
-        fetch('https://todoapp-dff63.firebaseio.com/.json', { method: 'GET' })
+        this.url = 'https://todoapp-dff63.firebaseio.com/.json';
+        fetch(this.url, { method: 'GET' })
             .then(response => {
                 if (response.status === 200) return response.json();
             })
             .then(data => {
-                this.data = data ? Object.entries(data) : [];
-                this.data.forEach(list => {
-                    list[1].items = list[1].items ? Object.entries(list[1].items) : [];
-                })
+                this.data = data || [];
                 this.emit('ready', this.data);
-            })
+            });
     }
+
+    getIDs() {
+        let existingIDs = [];
+        this.data.forEach(list => {
+            existingIDs.push(list.id)
+        });
+        return existingIDs;
+    }
+
     addList(list) {
-        fetch('https://todoapp-dff63.firebaseio.com/.json', { method: 'POST', body: JSON.stringify(list) })
-            .then(response => {
-                if (response.status === 200) return response.json();
-            })
-            .then((data) => {
-                let id = data.name;
-                this.data.push([id, list]);
-                this.emit('list added', [id, list]);
-            })
+        list.id = this.newID();
+        list.opened = false;
+        list.items = [];
+        this.data.push(list);
+        this.save();
+        this.emit('data changed', this.data);
+    }
+
+    deleteList(list) {
+        let index = this.data.indexOf(list);
+        this.data.splice(index, 1);
+        this.save();
     }
 }
+
+Object.assign(AppModel.prototype, new Autosave(), new IDGenerator());
+
+

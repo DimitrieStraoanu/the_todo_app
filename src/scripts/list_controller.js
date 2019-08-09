@@ -1,6 +1,5 @@
 export class ListController {
     constructor(listModel, listView) {
-        listModel.init();
         listView.on('newItem', (item) => {
             if (item.name) listModel.addItem(item);
         });
