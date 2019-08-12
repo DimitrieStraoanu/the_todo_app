@@ -20,7 +20,7 @@ export class AppView extends EventEmitter {
     generateAppHtml(data) {
         return `
             <div class="col-12 col-md-9 col-lg-6 d-flex flex-column p-0 mx-auto">
-                <div class="d-flex flex-column bg-light text-secondary border-bottom p-5">
+                <div class="d-flex flex-column bg-light text-secondary border-bottom py-5 px-3">
                     <div class="d-flex">
                         <div class="flex-grow-1">
                             <input id="name" class="form-control" type="text" placeholder="Add new list">

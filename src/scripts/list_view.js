@@ -84,7 +84,7 @@ export class ListView extends EventEmitter {
                         <button id="deleteBtn" class="btn btn-link p-0">Delete list</button>
                         <button id="sortBtn" class="btn btn-link p-0" ${data.items.length ? '' : 'disabled'}>Sort checked</button>
                     </div>
-                    <div class="d-flex mt-4 mx-5 pb-4">
+                    <div class="d-flex mt-4 mx-3 pb-4">
                         <div class="flex-grow-1">
                             <input id="itemName" class="form-control" type="text" placeholder="Add new todo">
                         </div>

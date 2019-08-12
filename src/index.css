@@ -15,10 +15,9 @@
 }
 
 .height-0 {
-    transition: height 1s;
     height:0px;
-
-
+    overflow: hidden;
+    transition: height 1s;
 }
 
 .checked {
