@@ -28,11 +28,11 @@ export class AppView extends EventEmitter {
                     <span class="h5 ml-2">Add New ToDoList</span>
                 </div>
                 <div id="input" class="d-none">
-                    <div class="d-flex bg-light text-secondary border-bottom py-5 px-3">
+                    <div class="d-flex bg-light text-secondary border-bottom p-3">
                         <div class="flex-grow-1">
                             <input id="name" class="form-control" type="text" autocomplete="off">
                         </div>
-                        <button id="saveBtn" class="btn btn-primary ml-1">Save list</button>
+                        <button id="saveBtn" class="btn btn-primary ml-1 text-nowrap">Save list</button>
                     </div>
                 </div>
                 <div id="lists">

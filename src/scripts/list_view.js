@@ -120,7 +120,7 @@ export class ListView extends EventEmitter {
                     <span id="itemName" class="ml-3 ${item.checked ? 'checked' : ''}"> ${item.name}</span>
                 </div>
                 <button data-id="${item.id}" class="itemRenameBtn btn btn-outline-primary ml-auto">Rename</button>
-                <button data-id="${item.id}" class="itemDeleteBtn btn btn-outline-primary ml-3 mr-3">Delete</button>
+                <button data-id="${item.id}" class="itemDeleteBtn btn btn-outline-primary ml-1 mr-3">Delete</button>
             </div>
         `;
     }
@@ -138,7 +138,6 @@ export class ListView extends EventEmitter {
         } else {
             this.emit('listElement changed', { opened: true });
         }
-        this.element.querySelector('#itemName').focus();
     }
 
     checkItem(e) {
