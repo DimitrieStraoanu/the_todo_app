@@ -54,7 +54,7 @@ export class ListView extends EventEmitter {
             });
         });
 
-        this.element.querySelectorAll('.itemEditBtn').forEach(button => {
+        this.element.querySelectorAll('.itemRenameBtn').forEach(button => {
             this.listener.addListener({
                 element: button,
                 event: 'click',
@@ -73,20 +73,24 @@ export class ListView extends EventEmitter {
 
     generateListHtml(data) {
         return `
-            <div id="listBtn" class="d-flex align-items-center pointer ${data.opened ? 'bg-primary text-white' : 'border-bottom text-secondary'} p-3">
-                    <h5 class="m-0 ">${data.name}</h5>
+            <div id="listBtn" class="d-flex align-items-center pointer ${data.opened ? 'bg-primary text-white' : 'border-bottom border-top text-secondary bg-light'} p-3">
+                    <div>
+                        <i class="fas fa-plus ${data.opened ? 'd-none' : ''}"></i>
+                        <i class="fas fa-chevron-up ${data.opened ? '' : 'd-none'}"></i>
+                        <span class="h5 ml-2">${data.name}</span>
+                    </div>
                     ${this.generateStatisticsHtml(data)}
             </div>
             <div class="${data.opened ? '' : 'd-none'}">
                 <div id="listOptions" class="bg-light">
-                    <div class="d-flex justify-content-around border-bottom p-2">
-                        <button id="renameBtn" class="btn btn-link p-0">Rename list</button>
-                        <button id="deleteBtn" class="btn btn-link p-0">Delete list</button>
-                        <button id="sortBtn" class="btn btn-link p-0" ${data.items.length ? '' : 'disabled'}>Sort checked</button>
+                    <div class="d-flex justify-content-around border-bottom p-3">
+                        <button id="renameBtn" class="btn btn-outline-primary">Rename list</button>
+                        <button id="deleteBtn" class="btn btn-outline-primary">Delete list</button>
+                        <button id="sortBtn" class="btn btn-outline-primary" ${data.items.length ? '' : 'disabled'}>Sort checked</button>
                     </div>
                     <div class="d-flex mt-4 mx-3 pb-4">
                         <div class="flex-grow-1">
-                            <input id="itemName" class="form-control" type="text" placeholder="Add new todo">
+                            <input id="itemName" class="form-control" type="text">
                         </div>
                         <button id="newItemBtn" class="btn btn-primary ml-1">+NewToDo</button>
                     </div>
@@ -104,7 +108,7 @@ export class ListView extends EventEmitter {
             <span class="ml-3">${this.getStatus(data)}</span>
         `;
         else return `
-            <span class="ml-auto">Add new ToDo</span>
+            <span class="ml-auto">Empty list</span>
         `;
     }
 
@@ -112,11 +116,11 @@ export class ListView extends EventEmitter {
         return `
             <div class="d-flex align-items-center border-top py-3">
                 <div class="itemBtn d-flex align-items-center pointer" data-id="${item.id}" data-checked = "${item.checked}">
-                    <i class="far fa-${item.checked ? 'check-' : ''}square fa-125x ml-3"></i>
-                    <span id="itemName" class="ml-2 ${item.checked ? 'checked' : ''}"> ${item.name}</span>
+                    <i class="text-primary far fa-${item.checked ? 'check-' : ''}square fa-125x ml-3"></i>
+                    <span id="itemName" class="ml-3 ${item.checked ? 'checked' : ''}"> ${item.name}</span>
                 </div>
-                <button data-id="${item.id}" class="itemEditBtn btn btn-link ml-auto p-0">Edit</button>
-                <button data-id="${item.id}" class="itemDeleteBtn btn btn-link ml-3 p-0 mr-3">Delete</button>
+                <button data-id="${item.id}" class="itemRenameBtn btn btn-outline-primary ml-auto">Rename</button>
+                <button data-id="${item.id}" class="itemDeleteBtn btn btn-outline-primary ml-3 mr-3">Delete</button>
             </div>
         `;
     }
@@ -134,6 +138,7 @@ export class ListView extends EventEmitter {
         } else {
             this.emit('listElement changed', { opened: true });
         }
+        this.element.querySelector('#itemName').focus();
     }
 
     checkItem(e) {
@@ -151,11 +156,10 @@ export class ListView extends EventEmitter {
         let html = `
             <div class="fullscreen d-flex justify-content-center align-items-center">
                 <div class="text-center p-5 bg-white shadow border">
-                    <p class="mb-2">Delete item ?</p>
-                    <hr class="m-0">
-                    <div class="mt-2">
-                        <button id="cancelBtn" class="btn btn-link p-0">Cancel</button>
-                        <button id="confirmBtn" class="btn btn-link p-0 ml-2">Confirm</button>
+                    <p>Delete item ?</p>
+                    <div class="mt-3">
+                        <button id="cancelBtn" class="btn btn-outline-primary">Cancel</button>
+                        <button id="confirmBtn" class="btn btn-outline-primary ml-3">Confirm</button>
                     </div>
                 </div>
             </div>
@@ -217,11 +221,10 @@ export class ListView extends EventEmitter {
         let html = `
             <div class="fullscreen d-flex justify-content-center align-items-center">
                 <div class="text-center p-5 bg-white shadow border">
-                    <p class="mb-2">Delete list "${this.listModel.data.name}" ?</p>
-                    <hr class="m-0">
-                    <div class="mt-2">
-                        <button id="cancelBtn" class="btn btn-link p-0">Cancel</button>
-                        <button id="confirmBtn" class="btn btn-link p-0 ml-2">Confirm</button>
+                    <p>Delete list "${this.listModel.data.name}" ?</p>
+                    <div class="mt-3">
+                        <button id="cancelBtn" class="btn btn-outline-primary">Cancel</button>
+                        <button id="confirmBtn" class="btn btn-outline-primary ml-3">Confirm</button>
                     </div>
                 </div>
             </div>
@@ -254,11 +257,10 @@ export class ListView extends EventEmitter {
         let html = `
             <div class="fullscreen d-flex justify-content-center align-items-center">
                 <div class="text-center p-5 bg-white shadow border">
-                    <input id="listName" class="form-control text-center border-0" type="text">
-                    <hr class="m-0">
-                    <div class="mt-2">
-                        <button id="cancelBtn" class="btn btn-link">Cancel</button>
-                        <button id="saveBtn" class="btn btn-link">Save</button>
+                    <input id="listName" class="form-control text-center" type="text">
+                    <div class="mt-3">
+                        <button id="cancelBtn" class="btn btn-outline-primary">Cancel</button>
+                        <button id="saveBtn" class="btn btn-outline-primary ml-3">Save</button>
                     </div>
                 </div>
             </div>

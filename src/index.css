@@ -25,7 +25,7 @@
 }
 
 .fa-125x {
-    font-size: 125%;
+    font-size: 160%;
 }
 
 .p-05 {
@@ -34,9 +34,6 @@
 
 /* bootstrat overwrite */
 
-.btn {
-    border-radius: 0;
-}
 
 .form-control {
     border-radius: 0;

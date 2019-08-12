@@ -15,21 +15,28 @@ export class AppView extends EventEmitter {
     updateAppElement(data) {
         this.element.innerHTML = this.generateAppHtml(data);
         this.element.querySelector('#saveBtn').addEventListener('click', () => this.makeNewList());
+        this.element.querySelector('#toggleInputBtn').addEventListener('click', () => this.toggleInputFields());
         this.emit('appElement updated');
     }
     generateAppHtml(data) {
+        console.log(data);
         return `
             <div class="col-12 col-md-9 col-lg-6 d-flex flex-column p-0 mx-auto">
-                <div class="d-flex flex-column bg-light text-secondary border-bottom py-5 px-3">
-                    <div class="d-flex">
+                <div id="toggleInputBtn" class="bg-primary pointer text-white text-center p-3">
+                    <i class="fas fa-plus"></i>
+                    <i class="fas fa-chevron-up d-none"></i>
+                    <span class="h5 ml-2">Add New ToDoList</span>
+                </div>
+                <div id="input" class="d-none">
+                    <div class="d-flex bg-light text-secondary border-bottom py-5 px-3">
                         <div class="flex-grow-1">
-                            <input id="name" class="form-control" type="text" placeholder="Add new list">
+                            <input id="name" class="form-control" type="text" autocomplete="off">
                         </div>
-                        <button id="saveBtn" class="btn btn-primary ml-1">+NewToDoList</button>
+                        <button id="saveBtn" class="btn btn-primary ml-1">Save list</button>
                     </div>
                 </div>
                 <div id="lists">
-                ${data.map(list => `<div id="${list.id}"></div>`).join('')}
+                ${data.map(list => `<div id="${list.id}" class="mt-2"></div>`).join('')}
                 </div>
             </div>
         `;
@@ -37,11 +44,14 @@ export class AppView extends EventEmitter {
     createListElement(list) {
         let div = document.createElement('div');
         div.id = list.id;
+        div.classList.add('mt-2');
         this.element.querySelector('#lists').appendChild(div);
         this.emit('listElement created', list);
     }
     toggleInputFields() {
         this.element.querySelector('#input').classList.toggle('d-none');
+        this.element.querySelectorAll('i').forEach(i => i.classList.toggle('d-none'));
+        this.element.querySelector('#name').focus();
     }
     clearInput() {
         this.element.querySelector('#name').value = '';
