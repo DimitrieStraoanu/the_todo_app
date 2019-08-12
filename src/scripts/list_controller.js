@@ -17,6 +17,12 @@ export class ListController {
         });
         listView.on('sort items', () => {
             listModel.sortList();
+        });        
+        listView.on('delete item', (id) => {
+            listModel.deleteItem(id);
+        });
+        listView.on('item renamed', (item) => {
+            if(item.name) listModel.updateItem(item);
         });
 
     }

@@ -3,10 +3,14 @@ import { EventEmitter } from './event_emitter.js';
 export class AppView extends EventEmitter {
     constructor(appModel, appElementID) {
         super();
-        this.element = document.querySelector(appElementID);
+        this.element = document.querySelector('#' + appElementID);
 
         appModel.on('ready', (data) => this.updateAppElement(data));
         appModel.on('data changed', (data) => this.updateAppElement(data));
+        appModel.on('data changed new list', (list) => {
+            this.clearInput();
+            this.createListElement(list);
+        });
     }
     updateAppElement(data) {
         this.element.innerHTML = this.generateAppHtml(data);
@@ -15,10 +19,9 @@ export class AppView extends EventEmitter {
     }
     generateAppHtml(data) {
         return `
-            <div class="col-12 col-md-9 col-lg-6 d-flex flex-column p-3 mx-auto">
-                <div class="d-flex flex-column bg-light text-secondary border-top border-bottom p-3">
-                    <h4 class="m-0 mx-auto">TheToDoApp</h4>
-                    <div class="d-flex mt-3">
+            <div class="col-12 col-md-9 col-lg-6 d-flex flex-column p-0 mx-auto">
+                <div class="d-flex flex-column bg-light text-secondary border-bottom p-5">
+                    <div class="d-flex">
                         <div class="flex-grow-1">
                             <input id="name" class="form-control" type="text" placeholder="Add new list">
                         </div>

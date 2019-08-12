@@ -10,12 +10,21 @@ export class AppController {
         appView.on('appElement updated', () => {
             appModel.data.forEach(list => {
                 let listModel = new ListModel(list);
-                let listView = new ListView(listModel, '#' + list.id);
+                let listView = new ListView(listModel, list.id);
                 let listController = new ListController(listModel, listView);
 
                 listView.on('listElement removed', () => appModel.deleteList(list));
                 listModel.on('data changed', () => appModel.save());
             });
         });
+        appView.on('listElement created', (list) => {
+                let listModel = new ListModel(list);
+                let listView = new ListView(listModel, list.id);
+                let listController = new ListController(listModel, listView);
+
+                listView.on('listElement removed', () => appModel.deleteList(list));
+                listModel.on('data changed', () => appModel.save());
+            });
+        
     }
 }

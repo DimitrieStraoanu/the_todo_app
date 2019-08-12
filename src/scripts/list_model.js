@@ -22,6 +22,12 @@ export class ListModel extends EventEmitter {
         this.data.items.push(item)
         this.emit('data changed', this.data);
     }
+    deleteItem(id) {
+        let item = this.data.items.find(item => item.id === id);
+        let index = this.data.items.indexOf(item);
+        this.data.items.splice(index,1);
+        this.emit('data changed', this.data);
+    }
 
     updateList(data) {
         this.data = Object.assign(this.data, data);
@@ -36,7 +42,7 @@ export class ListModel extends EventEmitter {
             if (!firstItem.checked && secondItem.checked) return this.data.sortDirection;
             else if (firstItem.checked && !secondItem.checked) return -this.data.sortDirection;
         });
-        
+
         this.emit('data changed', this.data)
     }
 

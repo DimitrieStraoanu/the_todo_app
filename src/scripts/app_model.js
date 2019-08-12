@@ -31,7 +31,7 @@ export class AppModel extends EventEmitter {
         list.items = [];
         this.data.push(list);
         this.save();
-        this.emit('data changed', this.data);
+        this.emit('data changed new list', list);
     }
 
     deleteList(list) {
