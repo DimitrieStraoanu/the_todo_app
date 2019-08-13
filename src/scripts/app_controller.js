@@ -15,6 +15,8 @@ export class AppController {
 
                 listView.on('listElement removed', () => appModel.deleteList(list));
                 listModel.on('data changed', () => appModel.save());
+                listView.on('listElement toggled',(data)=> appModel.toggleList(data));
+                appModel.on('lists changed',()=> listModel.ready());
             });
         });
         appView.on('listElement created', (list) => {
@@ -24,6 +26,9 @@ export class AppController {
 
                 listView.on('listElement removed', () => appModel.deleteList(list));
                 listModel.on('data changed', () => appModel.save());
+                listView.on('listElement toggled',(data)=>appModel.toggleList(data));
+                appModel.on('lists changed',()=> listModel.ready());
+
             });
         
     }

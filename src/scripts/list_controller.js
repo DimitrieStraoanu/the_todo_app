@@ -6,9 +6,6 @@ export class ListController {
         listView.on('itemElement changed', (item) => {
             listModel.updateItem(item);
         });
-        listView.on('listElement deleted', () => {
-            listModel.deleteList();
-        });
         listView.on('listElement renamed', (data) => {
             if(data.name) listModel.updateList(data);
         });
@@ -23,6 +20,9 @@ export class ListController {
         });
         listView.on('item renamed', (item) => {
             if(item.name) listModel.updateItem(item);
+        });
+        listView.on('canceled', (iem) => {
+            listModel.ready();
         });
 
     }

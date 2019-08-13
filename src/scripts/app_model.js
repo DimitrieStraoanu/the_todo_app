@@ -34,6 +34,16 @@ export class AppModel extends EventEmitter {
         this.emit('data changed new list', list);
     }
 
+    toggleList(data) {
+        this.data.forEach(list => {
+            if (list.id === data.id) list.opened = data.opened;
+            else list.opened = false;
+        });
+        this.emit('lists changed');
+        this.save();
+    }
+
+
     deleteList(list) {
         let index = this.data.indexOf(list);
         this.data.splice(index, 1);

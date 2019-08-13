@@ -32,11 +32,26 @@
     padding: 2px;
 }
 
-/* bootstrat overwrite */
+.rounded-more{
+    border-radius: 12px;
+}
 
+.marker-lg{
+    height:30px;
+}
+
+.selected{
+    box-sizing: content-box;
+    border: 3px solid white;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+/* bootstrat overwrite */
+.btn{
+    border-radius: 6px;
+}
 
 .form-control {
-    border-radius: 0;
+    border-radius: 6px;
 }
 
 input, textarea, button {

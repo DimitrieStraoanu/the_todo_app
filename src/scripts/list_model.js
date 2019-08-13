@@ -34,9 +34,13 @@ export class ListModel extends EventEmitter {
         this.emit('data changed', this.data);
     }
 
+    ready(){
+        this.emit('ready',this.data);
+    }
+    
     sortList() {
         let checkedItems = this.data.items.filter(item => item.checked);
-        if (checkedItems.length === 0 || checkedItems.length === this.data.items.length ) return;
+        if (checkedItems.length === 0 || checkedItems.length === this.data.items.length) return;
 
         if (!this.data.sortDirection) {
             if (this.data.items[0].checked) this.data.sortDirection = -1
