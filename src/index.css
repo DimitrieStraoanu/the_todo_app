@@ -3,11 +3,21 @@
 }
 
 .fullscreen {
+    z-index: 1000;
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
+}
+
+.height-0{
+    height: 0;
+}
+
+.animate-expand {
+    transition: height 0.5s ease-out;
+    overflow: hidden;
 }
 
 .checked {

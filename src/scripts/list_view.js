@@ -25,7 +25,7 @@ export class ListView extends EventEmitter {
         this.listener.addListener({
             element: this.element.querySelector('#listBtn'),
             event: 'click',
-            callback: (e) => this.toggleList(e)
+            callback: () => this.toggleList()
         });
 
         this.listener.addListener({
@@ -73,34 +73,36 @@ export class ListView extends EventEmitter {
 
     listTemplate(data) {
         return `
-            <div id="listBtn" class="d-flex align-items-center pointer  rounded-more border position-relative ${data.opened ? `bg-${data.color} text-white` : 'text-secondary bg-light'} p-3">
-                <div class="d-flex align-items-center ${data.opened ? '' : `text-${data.color}`}">
+            <div id="listBtn" class="d-flex align-items-center pointer  rounded-more border position-relative text-secondary bg-light p-3">
+                <div class="d-flex align-items-center text-${data.color}">
                     <i class="fas fa-plus ${data.opened ? 'd-none' : ''}"></i>
                     <i class="fas fa-chevron-up ${data.opened ? '' : 'd-none'}"></i>
                     <span class="h5 m-0 ml-2">${data.name}</span>
                 </div>
                 ${this.statisticsTemplate(data)}
             </div>
-            <div class="${data.opened ? '' : 'd-none'} border bg-light rounded-more mt-2">
-                <div id="listOptions">
-                    <div class="d-flex border-bottom p-3">
-                        <button id="renameBtn" class="btn btn-${data.color} btn-sm flex-grow-1 text-white text-nowrap">Rename list</button>
-                        <button id="deleteBtn" class="btn btn-${data.color} btn-sm flex-grow-1 text-white text-nowrap ml-2">Delete list</button>
-                        <button id="sortBtn" class="btn btn-${data.color} btn-sm flex-grow-1 text-white text-nowrap ml-2" ${data.items.length ? '' : 'disabled'}>Sort checked</button>
+            <div class="animate-expand ${data.opened ? '' : 'height-0'}">
+                <div class="wraper mt-2">
+                    <div class="border bg-light rounded-more">
+                        <div id="listOptions">
+                            <div class="d-flex border-bottom p-3">
+                                <button id="renameBtn" class="btn btn-${data.color} btn-sm flex-grow-1 text-white text-nowrap">Rename list</button>
+                                <button id="deleteBtn" class="btn btn-${data.color} btn-sm flex-grow-1 text-white text-nowrap ml-2">Delete list</button>
+                                <button id="sortBtn" class="btn btn-${data.color} btn-sm flex-grow-1 text-white text-nowrap ml-2" ${data.items.length ? '' : 'disabled'}>Sort checked</button>
+                            </div>
+                            <div class="mx-3 mb-4 mt-2">
+                                <p class="text-center text-secondary mb-1">Input a todo name</p>
+                                <input id="itemName" class="form-control mb-2" type="text">
+                                <button id="newItemBtn" class="btn btn-${data.color} btn-block text-white text-nowrap">Save ToDo</button>
+                            </div>
+                        </div>
+                        <div id="listItems" class="text-${data.color}">
+                            ${data.items.map(item => this.itemTemplate(item, data.color)).join('')}
+                        </div>
                     </div>
-                    <div class="mx-3 mb-4 mt-2">
-                        <p class="text-center text-secondary mb-1">Input a todo name</p>
-                        <input id="itemName" class="form-control mb-2" type="text">
-                        <button id="newItemBtn" class="btn btn-${data.color} btn-block text-white text-nowrap">Save ToDo</button>
-                    </div>
-                </div>
-                <div id="listItems" class="text-${data.color}">
-                    ${data.items.map(item => this.itemTemplate(item, data.color)).join('')}
+                    <div class="bg-${data.color} mt-2 p-2 rounded-more"></div>
                 </div>
             </div>
-            <div class="bg-${data.color} ${data.opened ? '' : 'd-none'} mt-2 p-2 rounded-more"></div>
-
-
         `;
     }
 
@@ -134,12 +136,27 @@ export class ListView extends EventEmitter {
         this.emit('newItem', newItem);
     }
 
-    toggleList(e) {
-        let id = e.currentTarget.parentElement.id;
-        let isOpened = this.listModel.data.opened;
-        if (isOpened) {
-            this.emit('listElement toggled', { id: id, opened: false });
+    toggleList() {
+        let id = this.element.id;
+        let opened = this.listModel.data.opened;
+
+        let toggleBtn = this.element.querySelector('#listBtn');
+        toggleBtn.querySelectorAll('i').forEach(i => i.classList.toggle('d-none'));
+
+        let wraper = this.element.querySelector('.wraper');
+        let height = parseInt(getComputedStyle(wraper).height);
+        let marginTop = parseInt(getComputedStyle(wraper).marginTop);
+        let marginBottom = parseInt(getComputedStyle(wraper).marginBottom);
+
+
+        if (opened) {
+            wraper.parentElement.style.height = height + marginTop + marginBottom + 'px';
+            setTimeout(()=>{
+                wraper.parentElement.style.height = '0';
+                this.emit('listElement toggled', { id: id, opened: false });
+            },0)
         } else {
+            wraper.parentElement.style.height = height + marginTop + marginBottom + 'px';
             this.emit('listElement toggled', { id: id, opened: true });
         }
     }

@@ -12,6 +12,9 @@ export class ListController {
         listView.on('listElement changed', (data) => {
             listModel.updateList(data);
         });
+        listView.on('listElement toggled', (data) => {
+            listModel.updateToggle(data);
+        });
         listView.on('sort items', () => {
             listModel.sortList();
         });        
@@ -21,7 +24,7 @@ export class ListController {
         listView.on('item renamed', (item) => {
             if(item.name) listModel.updateItem(item);
         });
-        listView.on('canceled', (iem) => {
+        listView.on('canceled', () => {
             listModel.ready();
         });
 

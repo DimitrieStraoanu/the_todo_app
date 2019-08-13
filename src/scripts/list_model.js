@@ -33,6 +33,10 @@ export class ListModel extends EventEmitter {
         this.data = Object.assign(this.data, data);
         this.emit('data changed', this.data);
     }
+    updateToggle(data) {
+        this.data = Object.assign(this.data, data);
+        this.emit('toggle changed');
+    }
 
     ready(){
         this.emit('ready',this.data);
