@@ -23,12 +23,14 @@ export class AppView extends EventEmitter {
         let div = document.createElement('div');
         div.id = list.id;
         div.classList.add('mt-2');
-        this.element.querySelector('#lists').appendChild(div);
+        this.element.querySelector('#lists').insertBefore(div,this.element.querySelector('#lists').firstElementChild);
         this.emit('listElement created', list);
     }
     toggleInputFields() {
-        let toggleBtn = this.element.querySelector('#toggleInputBtn')
-        this.element.querySelector('#listInput').classList.toggle('d-none');
+        let toggleBtn = this.element.querySelector('#toggleInputBtn');
+        let listInput = this.element.querySelector('#listInput');
+        listInput.classList.toggle('d-none');
+        
         toggleBtn.querySelectorAll('i').forEach(i => i.classList.toggle('d-none'));
     }
     clearInput() {
@@ -54,15 +56,15 @@ export class AppView extends EventEmitter {
                     <i class="fas fa-chevron-up d-none"></i>
                     <span class="h5 ml-2">Add New ToDoList</span>
                 </div>
-                <div id="listInput" class="bg-light border rounded-more p-3 mt-2">
-                    <p class="text-center text-secondary m-0 mb-1">Input list name</p>
+                <div id="listInput" class="d-none bg-light border rounded-more p-3 mt-2">
+                    <p class="text-center text-secondary m-0 mb-1">Input a list name</p>
                     <input id="listName" class="form-control mb-3" type="text" autocomplete="off">
                     <p class="text-center text-secondary m-0 mb-1">Pick a color</p>
                     <div id="colorPicker" class="d-flex align-items-center w-75 mx-auto mb-4">
                         <div data-color="primary" class="colorBtn flex-grow-1 bg-primary marker-lg rounded-lg pointer selected"></div>
-                        <div data-color="success" class="colorBtn flex-grow-1 bg-success marker-lg rounded-lg pointer ml-2"></div>
-                        <div data-color="warning" class="colorBtn flex-grow-1 bg-warning marker-lg rounded-lg pointer ml-2"></div>
-                        <div data-color="danger" class="colorBtn flex-grow-1 bg-danger marker-lg rounded-lg pointer ml-2"></div>
+                        <div data-color="success" class="colorBtn flex-grow-1 bg-success marker-lg rounded-lg pointer ml-3"></div>
+                        <div data-color="warning" class="colorBtn flex-grow-1 bg-warning marker-lg rounded-lg pointer ml-3"></div>
+                        <div data-color="danger" class="colorBtn flex-grow-1 bg-danger marker-lg rounded-lg pointer ml-3"></div>
                     </div>
                     <button id="saveBtn" class="btn btn-primary btn-block text-nowrap">Save ToDoList</button>
 

@@ -74,7 +74,7 @@ export class ListView extends EventEmitter {
     listTemplate(data) {
         return `
             <div id="listBtn" class="d-flex align-items-center pointer  rounded-more border position-relative ${data.opened ? `bg-${data.color} text-white` : 'text-secondary bg-light'} p-3">
-                <div class="d-flex align-items-center ${data.opened?'':`text-${data.color}`}">
+                <div class="d-flex align-items-center ${data.opened ? '' : `text-${data.color}`}">
                     <i class="fas fa-plus ${data.opened ? 'd-none' : ''}"></i>
                     <i class="fas fa-chevron-up ${data.opened ? '' : 'd-none'}"></i>
                     <span class="h5 m-0 ml-2">${data.name}</span>
@@ -88,8 +88,8 @@ export class ListView extends EventEmitter {
                         <button id="deleteBtn" class="btn btn-${data.color} btn-sm flex-grow-1 text-white text-nowrap ml-2">Delete list</button>
                         <button id="sortBtn" class="btn btn-${data.color} btn-sm flex-grow-1 text-white text-nowrap ml-2" ${data.items.length ? '' : 'disabled'}>Sort checked</button>
                     </div>
-                    <div class="mx-3 my-4">
-                        <p class="text-center text-secondary mb-1">Input todo name</p>
+                    <div class="mx-3 mb-4 mt-2">
+                        <p class="text-center text-secondary mb-1">Input a todo name</p>
                         <input id="itemName" class="form-control mb-2" type="text">
                         <button id="newItemBtn" class="btn btn-${data.color} btn-block text-white text-nowrap">Save ToDo</button>
                     </div>
@@ -98,6 +98,9 @@ export class ListView extends EventEmitter {
                     ${data.items.map(item => this.itemTemplate(item, data.color)).join('')}
                 </div>
             </div>
+            <div class="bg-${data.color} ${data.opened ? '' : 'd-none'} mt-2 p-2 rounded-more"></div>
+
+
         `;
     }
 
@@ -201,8 +204,9 @@ export class ListView extends EventEmitter {
             input.value = name;
             input.focus();
             nameElement.classList.add('d-none');
-            input.addEventListener('click', () => e.stopPropagation());
-            input.addEventListener('blur', () => {
+            input.addEventListener('click', (e) => e.stopPropagation());
+            input.addEventListener('blur', (e) => {
+                if (e.relatedTarget && e.relatedTarget.innerHTML === 'Save') return;
                 this.emit('canceled');
                 this.editMode = false;
             });

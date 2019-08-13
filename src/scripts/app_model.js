@@ -29,7 +29,7 @@ export class AppModel extends EventEmitter {
         list.id = this.newID();
         list.opened = false;
         list.items = [];
-        this.data.push(list);
+        this.data.unshift(list);
         this.save();
         this.emit('data changed new list', list);
     }
