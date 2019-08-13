@@ -30,7 +30,6 @@ export class AppView extends EventEmitter {
         let toggleBtn = this.element.querySelector('#toggleInputBtn')
         this.element.querySelector('#listInput').classList.toggle('d-none');
         toggleBtn.querySelectorAll('i').forEach(i => i.classList.toggle('d-none'));
-        this.element.querySelector('#listName').focus();
     }
     clearInput() {
         this.element.querySelector('#listName').value = '';
