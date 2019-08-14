@@ -81,7 +81,7 @@ export class ListView extends EventEmitter {
                 </div>
                 ${this.statisticsTemplate(data)}
             </div>
-            <div class="animate-expand ${data.opened ? '' : 'height-0'}">
+            <div class="animate-expand ${data.opened ? '' : 'height-0'} overflow-hidden">
                 <div class="wraper mt-2">
                     <div class="border bg-light rounded-more">
                         <div id="listOptions">
@@ -91,7 +91,7 @@ export class ListView extends EventEmitter {
                                 <button id="sortBtn" class="btn btn-${data.color} btn-sm flex-grow-1 text-white text-nowrap ml-2" ${data.items.length ? '' : 'disabled'}>Sort checked</button>
                             </div>
                             <div class="mx-3 mb-4 mt-2">
-                                <p class="text-center text-secondary mb-1">Input a todo name</p>
+                                <p class="text-center text-secondary mb-1">Input a todo</p>
                                 <input id="itemName" class="form-control mb-2" type="text">
                                 <button id="newItemBtn" class="btn btn-${data.color} btn-block text-white text-nowrap">Save ToDo</button>
                             </div>
@@ -112,7 +112,7 @@ export class ListView extends EventEmitter {
             <span class="ml-3">${this.getStatus(data)}</span>
         `;
         else return `
-            <span class="ml-auto">Empty list</span>
+            <span class="ml-auto">Empty</span>
         `;
     }
 
@@ -137,7 +137,6 @@ export class ListView extends EventEmitter {
     }
 
     toggleList() {
-        let id = this.element.id;
         let opened = this.listModel.data.opened;
 
         let toggleBtn = this.element.querySelector('#listBtn');
@@ -151,13 +150,13 @@ export class ListView extends EventEmitter {
 
         if (opened) {
             wraper.parentElement.style.height = height + marginTop + marginBottom + 'px';
-            setTimeout(()=>{
+            setTimeout(() => {
                 wraper.parentElement.style.height = '0';
-                this.emit('listElement toggled', { id: id, opened: false });
-            },0)
+                this.emit('listElement toggled', { opened: false });
+            }, 0);
         } else {
             wraper.parentElement.style.height = height + marginTop + marginBottom + 'px';
-            this.emit('listElement toggled', { id: id, opened: true });
+            this.emit('listElement toggled', { opened: true });
         }
     }
 
@@ -239,10 +238,15 @@ export class ListView extends EventEmitter {
     }
 
     getStatus(data) {
+        let initialStatus = data.status;
+        let status = '';
         let checkedItems = this.getCheckedItems(data);
         let totalItems = data.items.length;
-        if (checkedItems === totalItems) return 'Completed';
-        else return 'In progress';
+        if (checkedItems === totalItems) status = 'Completed';
+        else status = 'In progress';
+        if (initialStatus !== status) this.emit('listElement status changed', { status: status });
+        return status;
+
     }
 
     confirmDelete() {

@@ -16,6 +16,9 @@ export class AppModel extends EventEmitter {
                 this.emit('ready', this.data);
             });
     }
+    updateStatus(){
+        this.emit('status updated', this.data);
+    }
 
     getIDs() {
         let existingIDs = [];
@@ -29,15 +32,18 @@ export class AppModel extends EventEmitter {
         list.id = this.newID();
         list.opened = false;
         list.items = [];
+        list.status = 'Empty';
         this.data.unshift(list);
         this.save();
         this.emit('data changed new list', list);
+        this.emit('status updated', this.data);
     }
 
 
     deleteList(list) {
         let index = this.data.indexOf(list);
         this.data.splice(index, 1);
+        this.emit('status updated', this.data);
         this.save();
     }
 }

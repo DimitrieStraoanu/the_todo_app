@@ -14,8 +14,9 @@ export class AppController {
                 let listController = new ListController(listModel, listView);
 
                 listView.on('listElement removed', () => appModel.deleteList(list));
+                listView.on('listElement status changed', () => appModel.updateStatus());
                 listModel.on('data changed', () => appModel.save());
-                listModel.on('toggle changed', () => appModel.save());
+                listModel.on('data changed silent', () => appModel.save());
             });
         });
         appView.on('listElement created', (list) => {
@@ -24,8 +25,9 @@ export class AppController {
                 let listController = new ListController(listModel, listView);
 
                 listView.on('listElement removed', () => appModel.deleteList(list));
+                listView.on('listElement status changed', () => appModel.updateStatus());
                 listModel.on('data changed', () => appModel.save());
-                listModel.on('toggle changed', () => appModel.save());
+                listModel.on('data changed silent', () => appModel.save());
             });
         
     }

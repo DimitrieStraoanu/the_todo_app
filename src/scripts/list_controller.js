@@ -13,7 +13,10 @@ export class ListController {
             listModel.updateList(data);
         });
         listView.on('listElement toggled', (data) => {
-            listModel.updateToggle(data);
+            listModel.updateListSilent(data);
+        });
+        listView.on('listElement status changed', (data) => {
+            listModel.updateListSilent(data);
         });
         listView.on('sort items', () => {
             listModel.sortList();

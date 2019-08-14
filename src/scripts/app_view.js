@@ -7,6 +7,7 @@ export class AppView extends EventEmitter {
 
         appModel.on('ready', (data) => this.updateAppElement(data));
         appModel.on('data changed', (data) => this.updateAppElement(data));
+        appModel.on('status updated', (data) => this.updateStatusElement(data));
         appModel.on('data changed new list', (list) => {
             this.clearInput();
             this.createListElement(list);
@@ -67,7 +68,7 @@ export class AppView extends EventEmitter {
                     <i class="fas fa-chevron-up d-none"></i>
                     <span class="h5 ml-2">Add New ToDoList</span>
                 </div>
-                <div class="animate-expand height-0">
+                <div class="animate-expand height-0 overflow-hidden">
                     <div id="listInput" class="bg-light border rounded-more mt-2 p-3">
                         <p class="text-center text-secondary m-0 mb-1">Input a list name</p>
                         <input id="listName" class="form-control mb-3" type="text" autocomplete="off">
@@ -84,7 +85,39 @@ export class AppView extends EventEmitter {
                 <div id="lists">
                 ${data.map(list => `<div id="${list.id}" class="mt-2"></div>`).join('')}
                 </div>
+                <div id="status" class="bg-primary rounded-more border text-white text-center p-2 mt-2">
+                    ${this.statusTemplate(data)}
+                </div>
             </div>
         `;
     }
+
+    statusTemplate(data){
+        return `
+            <div>${this.getStatus(data)[1]} completed | ${this.getStatus(data)[2]} in progress | ${this.getStatus(data)[3]} empty</div>
+        `;
+    }
+
+    getStatus(data) {
+        let total = data.length;
+        let completed = data.reduce((acc, list) => {
+            if (list.status === 'Completed') return acc + 1;
+            else return acc;
+        }, 0);
+        let inProgress = data.reduce((acc, list) => {
+            if (list.status === 'In progress') return acc + 1;
+            else return acc;
+        }, 0);
+        let empty = data.reduce((acc, list) => {
+            if (list.status === 'Empty') return acc + 1;
+            else return acc;
+        }, 0);
+        return [ total, completed, inProgress, empty ];
+    }
+
+    updateStatusElement(data) {
+        let statusElement = this.element.querySelector('#status');
+        statusElement.innerHTML = this.statusTemplate(data);
+    }
+
 }
