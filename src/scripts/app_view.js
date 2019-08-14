@@ -4,6 +4,7 @@ export class AppView extends EventEmitter {
     constructor(appModel, appElementID) {
         super();
         this.element = document.querySelector('#' + appElementID);
+        this.opened = true;
 
         appModel.on('ready', (data) => this.updateAppElement(data));
         appModel.on('data changed', (data) => this.updateAppElement(data));
@@ -38,7 +39,8 @@ export class AppView extends EventEmitter {
 
         if (this.opened) {
             this.opened = false;
-            listInput.parentElement.style.height = '0';
+            listInput.parentElement.style.height = height + marginTop + marginBottom + 'px';
+            setTimeout(() => listInput.parentElement.style.height = '0px', 0);
         } else {
             listInput.parentElement.style.height = height + marginTop + marginBottom + 'px';
             this.opened = true;
@@ -64,11 +66,11 @@ export class AppView extends EventEmitter {
         return `
             <div class="col-12 col-md-9 col-lg-6 d-flex flex-column p-2 mx-auto">
                 <div id="toggleInputBtn" class="bg-primary border rounded-more pointer text-white text-center p-3">
-                    <i class="fas fa-plus"></i>
-                    <i class="fas fa-chevron-up d-none"></i>
+                    <i class="fas fa-plus d-none"></i>
+                    <i class="fas fa-chevron-up"></i>
                     <span class="h5 ml-2">Add New ToDoList</span>
                 </div>
-                <div class="animate-expand height-0 overflow-hidden">
+                <div class="animate-expand overflow-hidden">
                     <div id="listInput" class="bg-light border rounded-more mt-2 p-3">
                         <p class="text-center text-secondary m-0 mb-1">Input a list name</p>
                         <input id="listName" class="form-control mb-3" type="text" autocomplete="off">
@@ -92,7 +94,7 @@ export class AppView extends EventEmitter {
         `;
     }
 
-    statusTemplate(data){
+    statusTemplate(data) {
         return `
             <div>${this.getStatus(data)[1]} completed | ${this.getStatus(data)[2]} in progress | ${this.getStatus(data)[3]} empty</div>
         `;
@@ -112,7 +114,7 @@ export class AppView extends EventEmitter {
             if (list.status === 'Empty') return acc + 1;
             else return acc;
         }, 0);
-        return [ total, completed, inProgress, empty ];
+        return [total, completed, inProgress, empty];
     }
 
     updateStatusElement(data) {
