@@ -80,6 +80,7 @@ export class ListView extends EventEmitter {
                     <span class="h5 m-0 ml-2">${data.name}</span>
                 </div>
                 ${this.statisticsTemplate(data)}
+                <div class="fas fa-check text-success ml-2 ${data.status==='Completed'?'':'invisible'}"></div>
             </div>
             <div class="animate-expand ${data.opened ? '' : 'height-0'} overflow-hidden">
                 <div class="wraper mt-2">
