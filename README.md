@@ -1,6 +1,6 @@
 # the_todo_app
 
-A nice fun app created using pure JavaScript(es6), no frameworks involved :).
+A nice fun app created using pure JavaScript(ES6), no frameworks involved :).
 
 This is a app build using a object oriented programing style. The code is not perfect but it's a major improvement over the procedural programing used before.
 
